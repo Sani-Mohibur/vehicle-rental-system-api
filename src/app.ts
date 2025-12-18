@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { userRoutes } from "./modules/users/user.routes";
+import { authRoutes } from "./modules/auth/auth.routes";
 
 const app: Application = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(morgan("dev"));
 
 // Routes
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 
 // Health Check
