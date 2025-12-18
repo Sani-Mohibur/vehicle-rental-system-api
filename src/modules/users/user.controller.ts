@@ -15,6 +15,20 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const result = await userService.updateUser(req.params.id!, req.body);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    } else {
+      res.json({ message: "Data updated successfully", data: result.rows[0] });
+    }
+  } catch (error) {
+    res.status(500).json({ message: " Server error", error });
+  }
+};
+
 export const userController = {
   getAllUsers,
+  updateUser,
 };
