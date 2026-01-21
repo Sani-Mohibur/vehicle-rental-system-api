@@ -5,7 +5,7 @@ const signup = async (req: Request, res: Response) => {
   try {
     const result = await authService.signup(req.body);
     res.status(201).json({
-      status: "true",
+      success: "true",
       message: "User registered successfully",
       data: result,
     });
@@ -17,4 +17,17 @@ const signup = async (req: Request, res: Response) => {
   }
 };
 
-export const authController = { signup };
+const signin = async (req: Request, res: Response) => {
+  try {
+    const result = await authService.signin(req.body);
+    res.status(200).json({
+      success: "true",
+      message: "Login successful",
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const authController = { signup, signin };

@@ -1,5 +1,7 @@
 import bcrypt from "bcryptjs";
 import { pool } from "../../config/db.config";
+import { jwtToken } from "../../utils/token.utils";
+import config from "../../config/index.config";
 
 const signup = async (payload: Record<string, unknown>) => {
   const { name, email, password, phone, role } = payload;
@@ -13,13 +15,45 @@ const signup = async (payload: Record<string, unknown>) => {
   const createUser = await pool.query(
     `INSERT INTO users (name, email, password, phone, role)
      VALUES($1, $2, $3, $4, $5) RETURNING *`,
-    [name, email, hashedPass, phone, role]
+    [name, email, hashedPass, phone, role],
   );
   const result = createUser.rows[0];
   delete result.password;
   return result;
 };
 
+const signin = async (payload: Record<string, unknown>) => {
+  const { email, password } = payload;
+  const userExists = await pool.query(`SELECT * FROM users WHERE email=$1`, [
+    email,
+  ]);
+  const user = userExists.rows[0];
+  if (!user) {
+    throw new Error("User not found");
+  }
+  const isMatch = await bcrypt.compare(password as string, user.password);
+  if (!isMatch) {
+    throw new Error("Wrong password!");
+  }
+
+  const accessToken = jwtToken.genaretToken(
+    {
+      email: user.email,
+      role: user.role,
+    },
+    config.jwt_secret as string,
+    "30d",
+  );
+
+  const result = user;
+  delete result.password;
+  return {
+    data: result,
+    token: accessToken,
+  };
+};
+
 export const authService = {
   signup,
+  signin,
 };
