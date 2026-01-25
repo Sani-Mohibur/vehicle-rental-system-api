@@ -9,10 +9,7 @@ const signup = async (req: Request, res: Response) => {
       message: "User registered successfully",
       data: result,
     });
-  } catch (error: any) {
-    // if (error.message === "User already exists") {
-    //   return res.status(400).json({ message: error.message });
-    // }
+  } catch (error) {
     return res.status(500).json({ message: "Server error", error });
   }
 };
