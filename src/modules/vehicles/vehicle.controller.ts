@@ -5,7 +5,7 @@ export const createVehicle = async (req: Request, res: Response) => {
   try {
     const result = await VehicleService.createVehicle(req.body);
     res.status(201).json({
-      success: "true",
+      success: true,
       message: "Vehicle created successfully",
       data: result,
     });
@@ -14,4 +14,120 @@ export const createVehicle = async (req: Request, res: Response) => {
   }
 };
 
-export const VehicleController = { createVehicle };
+export const getAllVehicles = async (req: Request, res: Response) => {
+  try {
+    const result = await VehicleService.getAllVehicles();
+
+    if (result.rows.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No vehicles found",
+        data: [],
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Vehicles retrieved successfully",
+      data: result.rows,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const getVehicleById = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    const result = await VehicleService.getVehicleById(id);
+
+    if (result.rows.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No vehicles found",
+        data: [],
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Vehicles retrieved successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const updateVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicleId = Number(req.params.vehicleId);
+    const result = await VehicleService.updateVehicle(vehicleId, req.body);
+
+    if (!result) {
+      return res.status(200).json({
+        success: true,
+        message: "Vehicle not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Vehicle updated successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const deleteVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicleId = Number(req.params.vehicleId);
+    const result = await VehicleService.deleteVehicle(vehicleId);
+
+    if (!result) {
+      return res.status(200).json({
+        success: true,
+        message: "Vehicle not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Vehicle deleted successfully",
+    });
+  } catch (error: any) {
+    // catch (error: any) {
+    //   return res
+    //     .status(500)
+    //     .json({
+    //       message: "Server error",
+    //       error: error.message,
+    //       stack: error.stack,
+    //     });
+    // }
+    console.error(error); // log it to console for debugging
+
+    const message =
+      error?.message || // standard Error object
+      error?.detail || // pg error detail
+      JSON.stringify(error); // fallback for plain object
+
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: message,
+    });
+  }
+};
+
+export const VehicleController = {
+  createVehicle,
+  getAllVehicles,
+  getVehicleById,
+  updateVehicle,
+  deleteVehicle,
+};
