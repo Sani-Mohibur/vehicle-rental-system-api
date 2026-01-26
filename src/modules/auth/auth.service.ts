@@ -48,8 +48,8 @@ const signin = async (payload: Record<string, unknown>) => {
   const result = user;
   delete result.password;
   return {
-    data: result,
     token: accessToken,
+    user: result,
   };
 };
 
