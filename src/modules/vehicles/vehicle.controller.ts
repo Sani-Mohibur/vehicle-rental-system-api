@@ -99,28 +99,8 @@ export const deleteVehicle = async (req: Request, res: Response) => {
       success: true,
       message: "Vehicle deleted successfully",
     });
-  } catch (error: any) {
-    // catch (error: any) {
-    //   return res
-    //     .status(500)
-    //     .json({
-    //       message: "Server error",
-    //       error: error.message,
-    //       stack: error.stack,
-    //     });
-    // }
-    console.error(error); // log it to console for debugging
-
-    const message =
-      error?.message || // standard Error object
-      error?.detail || // pg error detail
-      JSON.stringify(error); // fallback for plain object
-
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: message,
-    });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
   }
 };
 

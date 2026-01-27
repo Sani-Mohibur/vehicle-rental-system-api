@@ -5,9 +5,9 @@ import { userService } from "./user.service";
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await userService.getAllUsers();
-    res.json({
-      status: "success",
-      count: result.rows.length,
+    res.status(200).json({
+      success: true,
+      message: "Users retrieved successfully",
       data: result.rows,
     });
   } catch (error) {
