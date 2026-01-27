@@ -38,6 +38,7 @@ const signin = async (payload: Record<string, unknown>) => {
 
   const accessToken = jwtToken.genaretToken(
     {
+      id: user.id,
       email: user.email,
       role: user.role,
     },
