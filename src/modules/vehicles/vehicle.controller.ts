@@ -88,7 +88,7 @@ export const deleteVehicle = async (req: Request, res: Response) => {
     const result = await VehicleService.deleteVehicle(vehicleId);
 
     if (!result) {
-      return res.status(200).json({
+      return res.status(404).json({
         success: true,
         message: "Vehicle not found",
         data: null,
