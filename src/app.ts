@@ -4,6 +4,7 @@ import cors from "cors";
 import { userRoutes } from "./modules/users/user.routes";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { VehicleRoutes } from "./modules/vehicles/vehicle.routes";
+import { BookingRoutes } from "./modules/bookings/booking.routes";
 
 const app: Application = express();
 
@@ -17,6 +18,7 @@ app.use(morgan("dev"));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/vehicles", VehicleRoutes);
+app.use("/api/v1/bookings", BookingRoutes);
 
 // Health Check
 app.get("/", (req: Request, res: Response) => {

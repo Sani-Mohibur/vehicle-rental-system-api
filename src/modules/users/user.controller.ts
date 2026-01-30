@@ -19,7 +19,7 @@ const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
     const user = req.user;
-    console.log(user);
+
     if (user.role !== "admin" && user.id !== userId) {
       return res.status(403).json({
         success: false,

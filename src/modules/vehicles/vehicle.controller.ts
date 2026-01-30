@@ -99,8 +99,10 @@ export const deleteVehicle = async (req: Request, res: Response) => {
       success: true,
       message: "Vehicle deleted successfully",
     });
-  } catch (error) {
-    return res.status(500).json({ message: "Server error", error });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
   }
 };
 
